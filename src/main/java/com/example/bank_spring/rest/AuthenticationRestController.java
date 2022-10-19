@@ -1,6 +1,6 @@
 package com.example.bank_spring.rest;
 
-import com.example.bank_spring.dto.service.*;
+import com.example.bank_spring.dto.*;
 import com.example.bank_spring.model.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

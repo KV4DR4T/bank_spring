@@ -1,15 +1,14 @@
-package com.example.bank_spring.dto.service.implementation;
+package com.example.bank_spring.service.implementation;
 
-import com.example.bank_spring.dto.service.AuthenticationRequestDto;
-import com.example.bank_spring.dto.service.RegisterRequestDto;
 import com.example.bank_spring.exception.InvalidInformationException;
 import com.example.bank_spring.exception.InvalidRoleException;
 import com.example.bank_spring.exception.UserNotFoundException;
-import com.example.bank_spring.model.Role;
 import com.example.bank_spring.model.User;
 import com.example.bank_spring.repository.UserRepository;
-import com.example.bank_spring.dto.service.UserService;
 import com.example.bank_spring.security.jwt.JwtTokenProvider;
+import com.example.bank_spring.service.AuthenticationRequestDto;
+import com.example.bank_spring.service.RegisterRequestDto;
+import com.example.bank_spring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -101,7 +100,7 @@ public class UserServiceIml implements UserService {
     }
 
     @Override
-    public User updateById(Long id,String token,RegisterRequestDto requestDto) throws UserNotFoundException, InvalidRoleException, InvalidInformationException {
+    public User updateById(Long id, String token, RegisterRequestDto requestDto) throws UserNotFoundException, InvalidRoleException, InvalidInformationException {
         if (requestDto.getPassword()==null || (requestDto.getName()==null) || (requestDto.getBirthDate()==null) || (requestDto.getEmail()==null) || (requestDto.getSex()==null)){
             throw new InvalidInformationException("None of the fields can be null");
         }
@@ -172,7 +171,7 @@ public class UserServiceIml implements UserService {
     }
 
     @Override
-    public void createManager(String token,RegisterRequestDto requestDto) throws UserNotFoundException {
+    public void createManager(String token, RegisterRequestDto requestDto) throws UserNotFoundException {
         String email = jwtTokenProvider.getEmail(jwtTokenProvider.resolveToken(token));
         User user =userRepository.findByEmail(email).orElseThrow(()->
                 new UserNotFoundException("User with email: "+ email +" not found"));

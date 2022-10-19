@@ -1,9 +1,7 @@
 package com.example.bank_spring.rest;
 
-import com.example.bank_spring.dto.service.RegisterRequestDto;
-import com.example.bank_spring.dto.service.UserService;
+import com.example.bank_spring.dto.UserService;
 import com.example.bank_spring.model.User;
-import com.example.bank_spring.security.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

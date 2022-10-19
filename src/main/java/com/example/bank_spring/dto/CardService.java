@@ -1,4 +1,4 @@
-package com.example.bank_spring.dto.service;
+package com.example.bank_spring.dto;
 
 import org.springframework.http.ResponseEntity;
 

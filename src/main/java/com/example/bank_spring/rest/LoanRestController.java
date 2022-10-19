@@ -1,7 +1,6 @@
 package com.example.bank_spring.rest;
 
-import com.example.bank_spring.dto.service.LoanCreationDto;
-import com.example.bank_spring.dto.service.LoanService;
+import com.example.bank_spring.dto.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

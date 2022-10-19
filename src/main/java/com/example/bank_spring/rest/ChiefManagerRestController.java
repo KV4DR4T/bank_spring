@@ -1,7 +1,6 @@
 package com.example.bank_spring.rest;
 
-import com.example.bank_spring.dto.service.RegisterRequestDto;
-import com.example.bank_spring.dto.service.UserService;
+import com.example.bank_spring.dto.UserService;
 import com.example.bank_spring.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

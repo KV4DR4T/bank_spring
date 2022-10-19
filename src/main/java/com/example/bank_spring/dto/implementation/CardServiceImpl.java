@@ -1,7 +1,7 @@
-package com.example.bank_spring.dto.service.implementation;
+package com.example.bank_spring.dto.implementation;
 
-import com.example.bank_spring.dto.service.CardService;
-import com.example.bank_spring.dto.service.UserService;
+import com.example.bank_spring.dto.CardService;
+import com.example.bank_spring.dto.UserService;
 import com.example.bank_spring.exception.CardNotFoundException;
 import com.example.bank_spring.model.DebitCard;
 import com.example.bank_spring.model.User;

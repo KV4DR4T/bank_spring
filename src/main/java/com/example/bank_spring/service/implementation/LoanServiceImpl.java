@@ -1,22 +1,20 @@
-package com.example.bank_spring.dto.service.implementation;
+package com.example.bank_spring.service.implementation;
 
-import com.example.bank_spring.dto.service.LoanCreationDto;
-import com.example.bank_spring.dto.service.LoanService;
-import com.example.bank_spring.dto.service.UserService;
 import com.example.bank_spring.exception.InvalidInformationException;
 import com.example.bank_spring.exception.LoanNotFoundException;
 import com.example.bank_spring.model.Loan;
 import com.example.bank_spring.model.User;
 import com.example.bank_spring.repository.LoanRepository;
 import com.example.bank_spring.security.jwt.JwtTokenProvider;
+import com.example.bank_spring.service.LoanCreationDto;
+import com.example.bank_spring.service.LoanService;
+import com.example.bank_spring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class LoanServiceImpl implements LoanService {
