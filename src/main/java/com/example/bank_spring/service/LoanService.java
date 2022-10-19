@@ -1,5 +1,6 @@
 package com.example.bank_spring.service;
 
+import com.example.bank_spring.dto.LoanCreationDto;
 import org.springframework.http.ResponseEntity;
 
 public interface LoanService {

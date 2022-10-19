@@ -6,7 +6,7 @@ import com.example.bank_spring.model.Loan;
 import com.example.bank_spring.model.User;
 import com.example.bank_spring.repository.LoanRepository;
 import com.example.bank_spring.security.jwt.JwtTokenProvider;
-import com.example.bank_spring.service.LoanCreationDto;
+import com.example.bank_spring.dto.LoanCreationDto;
 import com.example.bank_spring.service.LoanService;
 import com.example.bank_spring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
