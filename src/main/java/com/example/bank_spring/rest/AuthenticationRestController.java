@@ -1,7 +1,11 @@
 package com.example.bank_spring.rest;
 
 import com.example.bank_spring.dto.*;
+import com.example.bank_spring.exception.InvalidInformationException;
 import com.example.bank_spring.model.User;
+import com.example.bank_spring.service.CardService;
+import com.example.bank_spring.service.LoanService;
+import com.example.bank_spring.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +36,7 @@ public class AuthenticationRestController {
     }
 
     @PostMapping(value = "/register")
-    public void register(@RequestBody RegisterRequestDto requestDto){
+    public void register(@RequestBody RegisterRequestDto requestDto) throws InvalidInformationException {
         userService.register(requestDto);
     }
 
