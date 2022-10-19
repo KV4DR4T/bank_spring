@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String MANAGER_ENDPOINT="/manager/**";
     private static final String CHIEF_MANAGER_ENDPOINT="/api/chief_manager";
         private static final String LOGIN_ENDPOINT="/login";
-        private static final  String REGISTER_ENDPOINT ="/register";
+        private static final  String REGISTER_ENDPOINT ="/auth/register";
 
 
 

@@ -3,6 +3,7 @@ package com.example.bank_spring.dto.service.implementation;
 import com.example.bank_spring.dto.service.LoanCreationDto;
 import com.example.bank_spring.dto.service.LoanService;
 import com.example.bank_spring.dto.service.UserService;
+import com.example.bank_spring.exception.InvalidInformationException;
 import com.example.bank_spring.exception.LoanNotFoundException;
 import com.example.bank_spring.model.Loan;
 import com.example.bank_spring.model.User;
@@ -32,6 +33,9 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public void createLoan(String token, LoanCreationDto creationDto) throws Exception {
+        if(creationDto.getPeriod()==0||creationDto.getAmount()==0){
+            throw new InvalidInformationException("None of the fields can be null");
+        }
         Loan loan = new Loan();
         Date date = new Date();
         String month = date.getMonth()+1+"";
@@ -52,15 +56,9 @@ public class LoanServiceImpl implements LoanService {
         String email = jwtTokenProvider.getEmail(jwtTokenProvider.resolveToken(token));
         User user= userService.findByEmail(email);
         Long id = user.getId();
-        List<Loan> loans = loanRepository.findAllByPersonId(id).orElseThrow(()->
+        Loan loan = loanRepository.findByIdAndPersonId(loanId,id).orElseThrow(()->
                 new LoanNotFoundException("User doesn't have loan with id: "+loanId));
-        Map<String,String> status = new HashMap<>();
-        for(Loan l: loans){
-            if(l.getId().compareTo(loanId)==0){
-                return ResponseEntity.ok(l);
-            }
-        }
-        return null;
+        return ResponseEntity.ok(loan);
     }
 
     @Override

@@ -63,7 +63,7 @@ public class CardServiceImpl implements CardService {
         Long id = user.getId();
         List<DebitCard> cards=cardRepository.findAllByPersonId(id).orElseThrow(()->
                 new CardNotFoundException("User doesn't have card with id: "+cardId));
-
+        //TODO: as loan
         for(DebitCard c: cards){
             if(c.getId().compareTo(cardId)==0){
                 return ResponseEntity.ok(c);

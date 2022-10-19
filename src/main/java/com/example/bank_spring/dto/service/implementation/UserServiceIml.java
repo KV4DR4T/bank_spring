@@ -2,7 +2,10 @@ package com.example.bank_spring.dto.service.implementation;
 
 import com.example.bank_spring.dto.service.AuthenticationRequestDto;
 import com.example.bank_spring.dto.service.RegisterRequestDto;
+import com.example.bank_spring.exception.InvalidInformationException;
+import com.example.bank_spring.exception.InvalidRoleException;
 import com.example.bank_spring.exception.UserNotFoundException;
+import com.example.bank_spring.model.Role;
 import com.example.bank_spring.model.User;
 import com.example.bank_spring.repository.UserRepository;
 import com.example.bank_spring.dto.service.UserService;
@@ -14,7 +17,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.example.bank_spring.model.Role.MANAGER;
@@ -38,9 +43,12 @@ public class UserServiceIml implements UserService {
     }
 
     @Override
-    public void register(RegisterRequestDto requestDto) {
+    public void register(RegisterRequestDto requestDto) throws InvalidInformationException {
         User user = new User();
         user.setRole(USER);
+        if (requestDto.getPassword()==null || (requestDto.getName()==null) || (requestDto.getBirthDate()==null) || (requestDto.getEmail()==null) || (requestDto.getSex()==null)){
+            throw new InvalidInformationException("None of the fields can be null");
+        }
         user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
         user.setName(requestDto.getName());
         user.setEmail(requestDto.getEmail());
@@ -72,45 +80,51 @@ public class UserServiceIml implements UserService {
     }
 
 
-    //TODO: CUSTOM EXCEPTION
-    @Override
-    public User findById(Long id) throws UserNotFoundException {
-        return userRepository.findById(id).orElseThrow(()->
-                new UserNotFoundException("User with id: "+ id +" not found"));
-    }
 
     @Override
-    public void deleteById(Long id,String token) throws UserNotFoundException {
+    public void deleteById(Long id,String token) throws UserNotFoundException, InvalidRoleException {
         String email = jwtTokenProvider.getEmail(jwtTokenProvider.resolveToken(token));
         User user =userRepository.findByEmail(email).orElseThrow(()->
                 new UserNotFoundException("User with id: "+ id +" not found"));
 
-        if(user.getRole().getAuthority().equals("MANAGER")
-                ||user.getRole().getAuthority().equals("CHIEF_MANAGER")) {
-
-            userRepository.deleteById(id);
+        if(user.getRole().getAuthority().equals("MANAGER")) {
+            if(!(userRepository.findById(id).get().getRole().getId()==0)){
+                throw new InvalidRoleException("Manager is not allowed to delete other managers");
+            }else{
+                userRepository.deleteById(id);
+            }
+        }else if(user.getRole().getAuthority().equals("CHIEF_MANAGER")){
+                userRepository.deleteById(id);
+        }else{
+            throw new InvalidRoleException("User is not allowed to delete other users");
         }
     }
 
     @Override
-    public User updateById(Long id,String token,RegisterRequestDto requestDto) throws UserNotFoundException {
+    public User updateById(Long id,String token,RegisterRequestDto requestDto) throws UserNotFoundException, InvalidRoleException, InvalidInformationException {
+        if (requestDto.getPassword()==null || (requestDto.getName()==null) || (requestDto.getBirthDate()==null) || (requestDto.getEmail()==null) || (requestDto.getSex()==null)){
+            throw new InvalidInformationException("None of the fields can be null");
+        }
         String email = jwtTokenProvider.getEmail(jwtTokenProvider.resolveToken(token));
         User user =userRepository.findByEmail(email).orElseThrow(()->
+                new UserNotFoundException("User with email: "+ email +" not found"));
+
+        if(!user.getRole().getAuthority().equals("MANAGER")||
+                !user.getRole().getAuthority().equals("CHIEF_MANAGER")) {
+            throw new InvalidRoleException("User is not allowed to update other users");
+
+        }
+        User userToUpdate = userRepository.findById(id).orElseThrow(()->
                 new UserNotFoundException("User with id: "+ id +" not found"));
 
-        if(user.getRole().getAuthority().equals("MANAGER")||
-                user.getRole().getAuthority().equals("CHIEF_MANAGER")) {
-
-            userRepository.delete(user);
-           user.setPassword(requestDto.getPassword());
-           user.setName(requestDto.getName());
-           user.setSex(requestDto.getSex());
-           user.setEmail(requestDto.getEmail());
-           user.setBirthDate(requestDto.getBirthDate());
-           userRepository.save(user);
-           return user;
-        }
-        return null;
+        userRepository.delete(userToUpdate);
+        userToUpdate.setPassword(requestDto.getPassword());
+        userToUpdate.setName(requestDto.getName());
+        userToUpdate.setSex(requestDto.getSex());
+        userToUpdate.setEmail(requestDto.getEmail());
+        userToUpdate.setBirthDate(requestDto.getBirthDate());
+        userRepository.save(userToUpdate);
+        return userToUpdate;
     }
 
     @Override
@@ -136,17 +150,25 @@ public class UserServiceIml implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> showAllUsers(String token) throws UserNotFoundException {
+    public ResponseEntity<?> showAllUsers(String token) throws UserNotFoundException, InvalidRoleException {
         String email = jwtTokenProvider.getEmail(jwtTokenProvider.resolveToken(token));
         User user =userRepository.findByEmail(email).orElseThrow(()->
                 new UserNotFoundException("User with email: "+ email +" not found"));
 
-        if(user.getRole().getAuthority().equals("MANAGER")||
-                user.getRole().getAuthority().equals("CHIEF_MANAGER")) {
+        if(user.getRole().getAuthority().equals("MANAGER")) {
 
-            return ResponseEntity.ok(userRepository.findAll());
+            return ResponseEntity.ok(userRepository.findAllByRole(0));
+        }else if(user.getRole().getAuthority().equals("CHIEF_MANAGER")){
+
+            List<User> users = new ArrayList<>();
+            users.addAll(userRepository.findAllByRole(MANAGER.getId()).get());
+            users.addAll(userRepository.findAllByRole(USER.getId()).get());
+            return ResponseEntity.ok(users);
+        }else{
+
+            throw new InvalidRoleException("User is not alowed to check other user's acconts");
         }
-        return null;
+
     }
 
     @Override

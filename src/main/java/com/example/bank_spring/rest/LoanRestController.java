@@ -26,7 +26,7 @@ public class LoanRestController {
         return loanService.getLoans(token);
     }
 
-    @PostMapping(value = "/createLoan")
+    @PostMapping(value = "/create-loan")
     public void createLoan(@RequestHeader("Authorization") String token,
                            @RequestBody LoanCreationDto creationDto) throws Exception {
         loanService.createLoan(token,creationDto);
