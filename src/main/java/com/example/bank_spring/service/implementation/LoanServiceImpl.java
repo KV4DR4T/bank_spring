@@ -6,7 +6,7 @@ import com.example.bank_spring.model.Loan;
 import com.example.bank_spring.model.User;
 import com.example.bank_spring.repository.LoanRepository;
 import com.example.bank_spring.security.jwt.JwtTokenProvider;
-import com.example.bank_spring.dto.LoanCreationDto;
+import com.example.bank_spring.dto.LoanCreationRequestDto;
 import com.example.bank_spring.service.LoanService;
 import com.example.bank_spring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
-    public void createLoan(String token, LoanCreationDto creationDto) throws Exception {
+    public void createLoan(String token, LoanCreationRequestDto creationDto) throws Exception {
         if(creationDto.getPeriod()==0||creationDto.getAmount()==0){
             throw new InvalidInformationException("None of the fields can be null");
         }

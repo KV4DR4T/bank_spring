@@ -7,7 +7,7 @@ public class ErrorCodeException extends Exception {
     private static final String GENERAL_EXCEPTION_GUID = "ErrorCodeException";
     private int code = Integer.MAX_VALUE;
     private Object context;
-    private String errorCode = GENERAL_EXCEPTION_GUID; //Unique string for the exception (used by feign decoder imp)
+    private String errorCode = GENERAL_EXCEPTION_GUID;
 
     private ErrorCodeException() {
         super("Error code exception without message");

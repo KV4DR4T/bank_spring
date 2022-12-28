@@ -17,17 +17,9 @@ import java.util.*;
 public class AuthenticationRestController {
 
     private final UserService userService;
-    private final CardService cardService;
-    private final LoanService loanService;
 
-
-
-
-    public AuthenticationRestController(UserService userService, CardService cardService,
-                                        LoanService loanService) {
+    public AuthenticationRestController(UserService userService) {
         this.userService = userService;
-        this.cardService = cardService;
-        this.loanService = loanService;
     }
 
     @PostMapping(value = "/login")

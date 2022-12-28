@@ -15,6 +15,7 @@ public class JwtUser implements UserDetails {
     private final String sex;
     private final String email;
     private final String password;
+    private final Collection<? extends GrantedAuthority> authorities;
 
     public JwtUser(Long id, String name, String birthDate, String sex,
                    String email, String password,
@@ -28,12 +29,12 @@ public class JwtUser implements UserDetails {
         this.authorities = authorities;
     }
 
-    private final Collection<? extends GrantedAuthority> authorities;
+
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return authorities;
     }
 
     @Override

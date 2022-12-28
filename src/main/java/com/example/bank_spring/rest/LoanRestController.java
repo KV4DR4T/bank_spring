@@ -1,6 +1,6 @@
 package com.example.bank_spring.rest;
 
-import com.example.bank_spring.dto.LoanCreationDto;
+import com.example.bank_spring.dto.LoanCreationRequestDto;
 import com.example.bank_spring.service.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +28,7 @@ public class LoanRestController {
 
     @PostMapping(value = "/create-loan")
     public void createLoan(@RequestHeader("Authorization") String token,
-                           @RequestBody LoanCreationDto creationDto) throws Exception {
+                           @RequestBody LoanCreationRequestDto creationDto) throws Exception {
         loanService.createLoan(token,creationDto);
     }
 }

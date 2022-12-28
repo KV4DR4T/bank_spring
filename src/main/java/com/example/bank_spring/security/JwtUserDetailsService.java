@@ -1,5 +1,6 @@
 package com.example.bank_spring.security;
 
+import com.example.bank_spring.exception.UserNotFoundException;
 import com.example.bank_spring.model.User;
 import com.example.bank_spring.repository.UserRepository;
 import com.example.bank_spring.security.jwt.JwtUser;
@@ -28,7 +29,8 @@ public class JwtUserDetailsService implements UserDetailsService {
     @SneakyThrows
     @Override
     public UserDetails loadUserByUsername(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(()->  new Exception("e"));
+        User user = userRepository.findByEmail(email).orElseThrow(()->
+                new UserNotFoundException("User with email: "+email+" not found"));
 
         return JwtUserFactory.create(user);
     }

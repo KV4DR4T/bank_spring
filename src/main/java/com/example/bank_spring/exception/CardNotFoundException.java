@@ -1,3 +1,12 @@
+/*
+Автор:
+Дата: 08.12.2022
+Версія: 1.0
+
+Клас CardNotFoundException є класом- нащадком  ErrorCodeException
+
+*/
+
 package com.example.bank_spring.exception;
 
 import org.springframework.http.HttpStatus;
